@@ -1,0 +1,38 @@
+language: haxe
+
+# TravisCI by default run on linux.
+# Let's enable both linux and mac builds because why not?
+os:
+  - linux
+  - osx
+
+# Let's use OSX 10.10, which is the oldest version that homebrew provides bottles for.
+# https://docs.travis-ci.com/user/osx-ci-environment/
+osx_image: xcode6.4
+
+# Let's use Ubuntu Trusty instead of Precise, which reached its EOL on April 28, 2017.
+dist: trusty
+
+# Test with Haxe 3.4.2 and Haxe development.
+haxe:
+  - "3.4.2"
+  - development
+
+matrix:
+  # Allow Haxe development to fail.
+  allow_failures:
+    - haxe: development
+
+install:
+  # os-specific config
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+      export DISPLAY=:99.0;
+      export AUDIODEV=null;
+    fi
+  # Install haxelibs
+  - haxelib install flixel
+  - haxelib install flixel-addons
+  - haxelib list  
+
+script:
+  - haxelib run lime build html5
