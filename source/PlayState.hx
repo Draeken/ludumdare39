@@ -77,6 +77,7 @@ class PlayState extends FlxState
 		add(_player);
 
 		FlxG.camera.focusOn(new FlxPoint(_map.width * _map.tileWidth / 2.0, _map.height * _map.tileHeight / 2.0));
+		FlxG.worldBounds.height = FlxG.worldBounds.height + 64;
 
 	 	_hud = new HUD();
  		add(_hud);
