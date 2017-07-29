@@ -210,6 +210,8 @@ class PlayState extends FlxState
 	private function playerRespawn(timer:FlxTimer):Void
 	{
 		_player.respawn();
+
+		setScore(0);
 	}
 
 	private function onEnemyCollideWall(enemy:Enemy, wall:FlxObject):Void
@@ -233,11 +235,16 @@ class PlayState extends FlxState
 		_player.addEnergy(v);
 	}
 
-	public function addScore(v:Int)
+	private function setScore(v:Int)
 	{
-		_score += v;
+		_score = v;
 
 		_hud.setScore(_score);
+	}
+
+	public function addScore(v:Int)
+	{
+		setScore(_score + v);
 	}
 
 	public function killPlayer()
