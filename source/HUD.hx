@@ -53,6 +53,7 @@
     public function setScore(score:Int):Void
     {
         _scoreText.text = "Score " + Std.string(score);
+        _scoreText.setPosition(FlxG.width / 2 - _scoreText.width / 2, 50);
     }
 
     public function setEnergy(energy:Int = 0):Void
