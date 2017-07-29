@@ -22,6 +22,10 @@ class PlayState extends FlxState
 
 	private var _enemies:FlxTypedGroup<Enemy>;
 
+	private var _teleporters:FlxTypedGroup<Teleporter>;
+	private var _topTeleporters:Array<Teleporter>;
+	private var _bottomTeleporters:Array<Teleporter>;
+
 	private var _playerReviveTimer:FlxTimer;
 
 	// HUD
@@ -43,8 +47,14 @@ class PlayState extends FlxState
 
 		add(_mWalls);
 
-		_enemies =  new FlxTypedGroup<Enemy>();
+		_enemies = new FlxTypedGroup<Enemy>();
 		add(_enemies);
+
+
+		_topTeleporters = [];
+		_bottomTeleporters = [];
+		_teleporters = new FlxTypedGroup<Teleporter>();
+		add(_teleporters);
 
 		_grpEnemySpawners = new FlxTypedGroup<EnemySpawner>();
 		add(_grpEnemySpawners);
@@ -63,6 +73,7 @@ class PlayState extends FlxState
 		for (e in tmpMapEnemySpawners.objects) { placeEnemySpawners(e); }
 
 		placeBatterySpawners(cast _map.getLayer("BatterySpawners"));
+		placeTeleporters(cast _map.getLayer("TP"));
 
 		add(_player);
 
@@ -91,12 +102,23 @@ class PlayState extends FlxState
 			FlxG.collide(bullet, _mWalls, onBulletTouchWall);
 		}
 
+		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
+		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
+
 		_energy--;
 
 		if (_energy <= 0)
 			_energy = 1000;
 
  		_hud.updateHUD(_energy);
+	}
+
+	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
+	{
+		var destTp:Teleporter = teleporter.type == "top" ? FlxG.random.getObject(_bottomTeleporters) : FlxG.random.getObject(_topTeleporters);
+		var offset:Int = teleporter.type == "top" ? -32 : 32;
+		entity.y = destTp.y + offset;
+		entity.x = destTp.x;
 	}
 
 	private function placeSpawn(e: TiledObject):Void
@@ -117,6 +139,23 @@ class PlayState extends FlxState
 			batterySpawner.addTile(obj);
 
 		add(batterySpawner);
+	}
+
+	private function placeTeleporters(layer:TiledObjectLayer):Void
+	{
+		for (e in layer.objects)
+		{
+			if (e.name == "top")
+			{
+				_topTeleporters.push(new Teleporter("top", e.x, e.y, e.width, e.height));
+				_teleporters.add(new Teleporter("top", e.x, e.y, e.width, e.height));
+			}
+			if (e.name == "bottom")
+			{
+				_bottomTeleporters.push(new Teleporter("bottom", e.x, e.y, e.width, e.height));
+				_teleporters.add(new Teleporter("bottom", e.x, e.y, e.width, e.height));
+			}
+		}
 	}
 
 	private function onPlayerTouchEnemy(player:Player, enemy:Enemy):Void
