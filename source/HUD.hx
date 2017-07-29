@@ -18,6 +18,8 @@
 
     private var _batteryContentInitialHeight:Int;
 
+    private var _scoreText:FlxText;
+
     public function new()
     {
         super();
@@ -36,6 +38,11 @@
         add(_batteryContentSprite);
         add(_batteryEnergyText);
 
+        _scoreText = new FlxText(FlxG.width / 2, 50, 0, "Score 0", 16);
+        _scoreText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
+
+        add(_scoreText);
+
         // The UI sprites will stays at their position on the screen
         // even if the camera moves
         forEach(function(spr:FlxSprite)
@@ -43,10 +50,14 @@
             spr.scrollFactor.set(0, 0);
         });
     }
-
-    public function updateHUD(Energy:Float = 0)
+    public function setScore(score:Int):Void
     {
-        var percent = Energy / _batteryMaxEnergyValue;
+        _scoreText.text = "Score " + Std.string(score);
+    }
+
+    public function setEnergy(energy:Int = 0):Void
+    {
+        var percent = energy / _batteryMaxEnergyValue;
         _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
         _batteryContentSprite.scale.y = percent;
 
