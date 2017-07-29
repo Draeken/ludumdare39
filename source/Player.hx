@@ -8,10 +8,10 @@ import flixel.FlxObject;
 class Player extends FlxSprite
 {
     private static inline var RUN_SPEED:Int = 500;
-    private static inline var JUMP_SPEED:Int = 800;
-    private static inline var JUMPS_ALLOWED:Int = 1;
+    private static inline var JUMP_SPEED:Int = 666;
+    private static inline var JUMPS_ALLOWED:Int = 2;
     private static inline var JUMP_FACTOR:Float = 0.6;
-    private static inline var GRAVITY:Int = 1500;
+    private static inline var GRAVITY:Int = 2222;
     private static inline var DRAG_FACTOR:Int = 8;
 
 
