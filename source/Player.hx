@@ -22,7 +22,7 @@ class Player extends FlxSprite
         setFacingFlip(FlxObject.LEFT, false, false);
         setFacingFlip(FlxObject.RIGHT, true, false);
 
-        setSize(24, 15);
+        // setSize(32, 48);
 		maxVelocity.set(150, 300);
 		acceleration.y = 800;
 		drag.x = maxVelocity.x * 4;

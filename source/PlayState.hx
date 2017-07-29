@@ -1,12 +1,12 @@
 package;
 
 import flixel.FlxState;
-// import flixel.addons.editors.tiled.TiledMap;
-// import flixel.addons.editors.tiled.TiledObject;
-// import flixel.addons.editors.tiled.TiledTileLayer;
-// import flixel.addons.editors.tiled.TiledObjectLayer;
-// import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
-// import flixel.tile.FlxTilemap;
+import flixel.addons.editors.tiled.TiledMap;
+import flixel.addons.editors.tiled.TiledObject;
+import flixel.addons.editors.tiled.TiledTileLayer;
+import flixel.addons.editors.tiled.TiledObjectLayer;
+import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
+import flixel.tile.FlxTilemap;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.FlxCamera.FlxCameraFollowStyle;
@@ -15,8 +15,8 @@ import flixel.util.FlxTimer;
 
 class PlayState extends FlxState
 {
-	// private var _map:TiledMap;
-	// private var _mWalls:FlxTilemap;
+	private var _map:TiledMap;
+	private var _mWalls:FlxTilemap;
 	private var _player:Player;
 	private var _grpEnemySpawners:FlxTypedGroup<EnemySpawner>;
 
@@ -28,10 +28,9 @@ class PlayState extends FlxState
 
 	override public function create():Void
 	{
-		/*
-		_map = new TiledMap(AssetPaths.tilemap__tmx);
+		_map = new TiledMap(AssetPaths.level0__tmx);
 		_mWalls = new FlxTilemap();
-		_mWalls.loadMapFromArray(cast(_map.getLayer("walls"), TiledTileLayer).tileArray, _map.width,
+		_mWalls.loadMapFromArray(cast(_map.getLayer("Walls"), TiledTileLayer).tileArray, _map.width,
 			_map.height, AssetPaths.tiles__png, _map.tileWidth, _map.tileHeight,
 			FlxTilemapAutoTiling.OFF, 1, 1, 3);
 		_mWalls.follow();
@@ -39,7 +38,6 @@ class PlayState extends FlxState
 		_mWalls.setTileProperties(3, FlxObject.ANY);
 
 		add(_mWalls);
-		*/
 
 		_enemies =  new FlxTypedGroup<Enemy>();
 		add(_enemies);
@@ -54,13 +52,11 @@ class PlayState extends FlxState
 		add(_bullets);
 
 		// Parse map
-		// var tmpMapSpawn:TiledObjectLayer = cast _map.getLayer("spawn");
-		// var tmpMapItems:TiledObjectLayer = cast _map.getLayer("items");
-		// var tmpMapEnemySpawners:TiledObjectLayer = cast _map.getLayer("mobSpawners");
+		var tmpMapSpawn:TiledObjectLayer = cast _map.getLayer("Player");
+		var tmpMapEnemySpawners:TiledObjectLayer = cast _map.getLayer("MobSpawners");
 
-		// for (e in tmpMapSpawn.objects) { placeSpawn(e);	}
-		// for (e in tmpMapItems.objects) { placeItems(e); }
-		// for (e in tmpMapEnemySpawners.objects) { placeEnemySpawners(e); }
+		for (e in tmpMapSpawn.objects) { placeSpawn(e);	}
+		for (e in tmpMapEnemySpawners.objects) { placeEnemySpawners(e); }
 
 		add(_player);
 
@@ -72,33 +68,25 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		// FlxG.collide(_player, _mWalls);
+		FlxG.collide(_player, _mWalls);
 
-		// for (enemy in _enemies)
-		// {
-		// 	FlxG.collide(enemy, _mWalls, onEnemyCollideWall);
-		// 	FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
-		// 	FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
-		// }
+		for (enemy in _enemies)
+		{
+			FlxG.collide(enemy, _mWalls, onEnemyCollideWall);
+			FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
+			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
+		}
 	}
 
-	/*
 	private function placeSpawn(e: TiledObject):Void
 	{
-		if (e.name != "player") { return; }
 		_player.setInitialPosition(e.x, e.y);
-	}
-
-	private function placeItems(e:TiledObject):Void
-	{
 	}
 
 	private function placeEnemySpawners(e:TiledObject):Void
 	{
-		if (e.name != "mobSpawner") { return; }
 		_grpEnemySpawners.add(new EnemySpawner(this, e.x, e.y));
 	}
-	*/
 
 	private function onPlayerTouchEnemy(player:Player, enemy:Enemy):Void
 	{
