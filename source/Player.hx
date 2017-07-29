@@ -25,6 +25,9 @@ class Player extends FlxSprite
     private var _jumpKeys:Array<FlxKey> = [SPACE, UP, W];
     private var _jumpPower:Float = 0.25;
 
+    private var _maxEnergy:Float = 1000;
+	private var _energy:Float = 1000;
+
     public function new(playState:PlayState, ?x:Float = 0, ?y:Float = 0)
     {
         super(x, y);
@@ -42,6 +45,16 @@ class Player extends FlxSprite
         _direction = 1;
     }
 
+    public function getEnergy():Float
+    {
+        return _energy;
+    }
+
+	public function addEnergy(v:Float):Void
+	{
+		_energy = cast Math.min(_energy + v, _maxEnergy);
+	}
+
     public function setInitialPosition(X:Float, Y:Float):Void
     {
         _initialX = X;
@@ -55,6 +68,8 @@ class Player extends FlxSprite
     {
         movement(elapsed);
         shoot();
+        _playState.decreaseEnergy(elapsed * 10);
+
         super.update(elapsed);
     }
 
@@ -62,6 +77,7 @@ class Player extends FlxSprite
     {
         x = _initialX;
         y = _initialY;
+        _energy = _maxEnergy;
         revive();
     }
 
@@ -84,6 +100,9 @@ class Player extends FlxSprite
             facing = FlxObject.LEFT;
 		}
 
+        if (acceleration.x != 0)
+            _playState.decreaseEnergy(3);
+
         jump(elapsed);
 
         if (isTouching(FlxObject.FLOOR) && !FlxG.keys.anyPressed(_jumpKeys))
@@ -93,10 +112,23 @@ class Player extends FlxSprite
         }
     }
 
+    public function decreaseEnergy(value:Float)
+    {
+        _energy -= value;
+
+        if (_energy <= 0)
+         {
+            _playState.killPlayer();
+            _energy = 0;
+         }
+    }
+
     private function jump(elapsed:Float):Void
     {
         if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
         {
+            _playState.decreaseEnergy(10);
+            
             FlxG.sound.play(AssetPaths.jump__wav);
             _timesJumped++;
             _jumpTime = 0;
@@ -124,6 +156,8 @@ class Player extends FlxSprite
     {
         if (FlxG.keys.justPressed.X)
         {
+            _playState.decreaseEnergy(50);
+            
             var offset:Float = velocity.x / maxVelocity.x;
 
             if (_direction == 1)

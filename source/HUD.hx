@@ -44,9 +44,9 @@
         });
     }
 
-    public function updateHUD(Energy:Int = 0):Void
+    public function updateHUD(Energy:Float = 0):Void
     {
-        var percent = cast(Energy, Float) / _batteryMaxEnergyValue;
+        var percent = Energy / _batteryMaxEnergyValue;
         _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
         _batteryContentSprite.scale.y = percent;
     }
