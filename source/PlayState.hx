@@ -28,6 +28,8 @@ class PlayState extends FlxState
 
 	private var _playerReviveTimer:FlxTimer;
 
+	private var _score:Int;
+
 	// HUD
 	private var _hud:HUD;
 
@@ -81,6 +83,8 @@ class PlayState extends FlxState
 	 	_hud = new HUD();
  		add(_hud);
 
+		_hud.setScore(0);
+
 		super.create();
 	}
 
@@ -104,7 +108,7 @@ class PlayState extends FlxState
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
- 		_hud.updateHUD(_player.getEnergy());
+ 		_hud.setEnergy(cast _player.getEnergy());
 	}
 
 	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
@@ -183,7 +187,12 @@ class PlayState extends FlxState
 
 	private function killEnemy(enemy:Enemy)
 	{
+		if (!enemy.alive)
+			return;
+
 		enemy.kill();
+
+		addScore(5000);
 
 		// 25% to drop battery
 		if (FlxG.random.int(0, 3) == 0)
@@ -201,6 +210,8 @@ class PlayState extends FlxState
 	private function playerRespawn(timer:FlxTimer):Void
 	{
 		_player.respawn();
+
+		setScore(0);
 	}
 
 	private function onEnemyCollideWall(enemy:Enemy, wall:FlxObject):Void
@@ -222,6 +233,18 @@ class PlayState extends FlxState
 	public function addEnergy(v:Int)
 	{
 		_player.addEnergy(v);
+	}
+
+	private function setScore(v:Int)
+	{
+		_score = v;
+
+		_hud.setScore(_score);
+	}
+
+	public function addScore(v:Int)
+	{
+		setScore(_score + v);
 	}
 
 	public function killPlayer()
