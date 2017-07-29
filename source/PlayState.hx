@@ -62,6 +62,8 @@ class PlayState extends FlxState
 		for (e in tmpMapSpawn.objects) { placeSpawn(e);	}
 		for (e in tmpMapEnemySpawners.objects) { placeEnemySpawners(e); }
 
+		placeBatterySpawners(cast _map.getLayer("BatterySpawners"));
+
 		add(_player);
 
 		FlxG.camera.follow(_player, FlxCameraFollowStyle.PLATFORMER, 1);
@@ -100,6 +102,16 @@ class PlayState extends FlxState
 	private function placeEnemySpawners(e:TiledObject):Void
 	{
 		_grpEnemySpawners.add(new EnemySpawner(this, e.x, e.y));
+	}
+
+	private function placeBatterySpawners(layer:TiledObjectLayer):Void
+	{
+		var batterySpawner = new BatterySpawner(_player);
+
+		for (obj in layer.objects)
+			batterySpawner.addTile(obj);
+
+		add(batterySpawner);
 	}
 
 	private function onPlayerTouchEnemy(player:Player, enemy:Enemy):Void

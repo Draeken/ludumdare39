@@ -122,7 +122,7 @@ class Player extends FlxSprite
 
     private function shoot():Void
     {
-        if (FlxG.keys.justPressed.CONTROL)
+        if (FlxG.keys.justPressed.X)
         {
             _playState.addBullet(x + (width / 2.0), y + (height / 2.0), _direction);
             FlxG.sound.play(AssetPaths.shoot1__wav);
