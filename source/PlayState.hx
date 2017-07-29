@@ -187,6 +187,9 @@ class PlayState extends FlxState
 
 	private function killEnemy(enemy:Enemy)
 	{
+		if (!enemy.alive)
+			return;
+
 		enemy.kill();
 
 		addScore(5000);
