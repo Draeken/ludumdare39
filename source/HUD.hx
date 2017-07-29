@@ -58,7 +58,7 @@
 
     public function setEnergy(energy:Int = 0):Void
     {
-        var percent = energy / _batteryMaxEnergyValue;
+        var percent = cast(energy, Float) / cast(_batteryMaxEnergyValue, Float);
         _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
         _batteryContentSprite.scale.y = percent;
 
