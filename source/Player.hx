@@ -1,15 +1,29 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
 
 class Player extends FlxSprite
 {
+    private static inline var RUN_SPEED:Int = 500;
+    private static inline var JUMP_SPEED:Int = 800;
+    private static inline var JUMPS_ALLOWED:Int = 1;
+    private static inline var JUMP_FACTOR:Float = 0.6;
+    private static inline var GRAVITY:Int = 1500;
+    private static inline var DRAG_FACTOR:Int = 8;
+
+
     private var _playState:PlayState;
     private var _initialX:Float;
     private var _initialY:Float;
     private var _direction:Int;
+
+	private var _jumpTime:Float = -1;
+	private var _timesJumped:Int = 0;
+    private var _jumpKeys:Array<FlxKey> = [SPACE, UP, W];
+    private var _jumpPower:Float = 0.25;
 
     public function new(playState:PlayState, ?x:Float = 0, ?y:Float = 0)
     {
@@ -23,9 +37,9 @@ class Player extends FlxSprite
         setFacingFlip(FlxObject.RIGHT, true, false);
 
         // setSize(32, 48);
-		maxVelocity.set(150, 300);
-		acceleration.y = 800;
-		drag.x = maxVelocity.x * 4;
+		maxVelocity.set(RUN_SPEED, JUMP_SPEED);
+		acceleration.y = GRAVITY;
+		drag.x = maxVelocity.x * DRAG_FACTOR;
         _direction = 1;
     }
 
@@ -40,7 +54,7 @@ class Player extends FlxSprite
 
     override public function update(elapsed:Float):Void
     {
-        movement();
+        movement(elapsed);
         shoot();
         super.update(elapsed);
     }
@@ -52,27 +66,58 @@ class Player extends FlxSprite
         revive();
     }
 
-    private function movement():Void
+    private function movement(elapsed:Float):Void
     {
         acceleration.x = 0;
+        acceleration.y = GRAVITY;
 
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
-			velocity.x = -maxVelocity.x;
-            _direction = -1;
+            acceleration.x = -drag.x;
 		}
 
 		if (FlxG.keys.anyPressed([RIGHT, D]))
 		{
-			velocity.x = maxVelocity.x;
-            _direction = 1;
+            acceleration.x = drag.x;
 		}
 
-		if (FlxG.keys.anyJustPressed([SPACE, UP, W]) && isTouching(FlxObject.FLOOR))
-		{
-			velocity.y = -maxVelocity.y;
+        jump(elapsed);
+
+        if (isTouching(FlxObject.FLOOR) && !FlxG.keys.anyPressed(_jumpKeys))
+        {
+            _jumpTime = -1;
+            _timesJumped = 0;
+        }
+    }
+
+    private function jump(elapsed:Float):Void
+    {
+        FlxG.log.notice("jump key " + FlxG.keys.anyJustPressed(_jumpKeys) + " velocity " + velocity.y + " timeJumed " + _timesJumped);
+        if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
+        {
+            FlxG.log.notice("jumped");
             FlxG.sound.play(AssetPaths.jump__wav);
-		}
+            _timesJumped++;
+            _jumpTime = 0;
+        }
+        if (FlxG.keys.anyPressed(_jumpKeys) && (_jumpTime >= 0))
+        {
+            _jumpTime += elapsed;
+
+            if (_jumpTime > _jumpPower)
+            {
+                _jumpTime = -1;
+            }
+            else
+            {
+                velocity.y = -JUMP_FACTOR * maxVelocity.y;
+            }
+
+        }
+        else
+        {
+            _jumpTime = -1;
+        }
     }
 
     private function shoot():Void
