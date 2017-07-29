@@ -8,6 +8,7 @@ import flixel.addons.editors.tiled.TiledObjectLayer;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
 import flixel.FlxObject;
+import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -37,7 +38,6 @@ class PlayState extends FlxState
 		_mWalls.loadMapFromArray(cast(_map.getLayer("Walls"), TiledTileLayer).tileArray, _map.width,
 			_map.height, AssetPaths.tiles__png, _map.tileWidth, _map.tileHeight,
 			FlxTilemapAutoTiling.OFF, 1, 1, 3);
-		_mWalls.follow();
 		_mWalls.setTileProperties(2, FlxObject.NONE);
 		_mWalls.setTileProperties(3, FlxObject.ANY);
 
@@ -66,7 +66,7 @@ class PlayState extends FlxState
 
 		add(_player);
 
-		FlxG.camera.follow(_player, FlxCameraFollowStyle.PLATFORMER, 1);
+		FlxG.camera.focusOn(new FlxPoint(_map.width * _map.tileWidth / 2.0, _map.height * _map.tileHeight / 2.0));
 
 	 	_hud = new HUD();
  		add(_hud);
