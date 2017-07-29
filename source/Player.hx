@@ -36,7 +36,6 @@ class Player extends FlxSprite
         setFacingFlip(FlxObject.LEFT, false, false);
         setFacingFlip(FlxObject.RIGHT, true, false);
 
-        // setSize(32, 48);
 		maxVelocity.set(RUN_SPEED, JUMP_SPEED);
 		acceleration.y = GRAVITY;
 		drag.x = maxVelocity.x * DRAG_FACTOR;
@@ -74,11 +73,13 @@ class Player extends FlxSprite
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
             acceleration.x = -drag.x;
+            _direction = -1;
 		}
 
 		if (FlxG.keys.anyPressed([RIGHT, D]))
 		{
             acceleration.x = drag.x;
+            _direction = 1;
 		}
 
         jump(elapsed);
@@ -92,10 +93,8 @@ class Player extends FlxSprite
 
     private function jump(elapsed:Float):Void
     {
-        FlxG.log.notice("jump key " + FlxG.keys.anyJustPressed(_jumpKeys) + " velocity " + velocity.y + " timeJumed " + _timesJumped);
         if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
         {
-            FlxG.log.notice("jumped");
             FlxG.sound.play(AssetPaths.jump__wav);
             _timesJumped++;
             _jumpTime = 0;
@@ -124,7 +123,8 @@ class Player extends FlxSprite
     {
         if (FlxG.keys.justPressed.X)
         {
-            _playState.addBullet(x + (width / 2.0), y + (height / 2.0), _direction);
+            var offset:Float = velocity.x / maxVelocity.x;
+            _playState.addBullet(x + _direction * ((width / 2.0) + offset), y + (height / 2.0), _direction);
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }

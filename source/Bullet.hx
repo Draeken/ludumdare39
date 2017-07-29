@@ -6,13 +6,13 @@ import flixel.tweens.FlxEase;
 
 class Bullet extends FlxSprite
 {
-    private var _speed:Float = 200;
+    private var _speed:Float = 750;
     private var _direction:Int;
 
     public function new(x:Float, y:Float, direction:Int)
     {
         super(x, y);
-        loadGraphic(AssetPaths.bullet__png, false, 8, 8);
+        loadGraphic(AssetPaths.bullet__png, false);
         _direction = direction;
         velocity.x = _speed * _direction;
     }

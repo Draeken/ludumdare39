@@ -49,6 +49,5 @@
         var percent = cast(Energy, Float) / _batteryMaxEnergyValue;
         _batteryEnergyText.text = Std.string(cast(percent * 100, Int)) + "%";
         _batteryContentSprite.scale.y = percent;
-        FlxG.log.notice("Battry content sprite heigth: " + Std.string(_batteryContentSprite.height));
     }
  }
