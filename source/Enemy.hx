@@ -8,6 +8,7 @@ import flixel.tweens.FlxEase;
 
 class Enemy extends FlxSprite
 {
+    private static inline var GRAVITY:Int = 2000;
     private var _speed:Float;
     private var _direction:Int;
 
@@ -19,7 +20,7 @@ class Enemy extends FlxSprite
         setFacingFlip(FlxObject.RIGHT, true, false);
 
         _speed = 250;
-		acceleration.y = 800;
+		acceleration.y = GRAVITY;
         _direction = 1;
         velocity.x = _speed * _direction;
         origin.y = height;
@@ -50,7 +51,7 @@ class Enemy extends FlxSprite
         // FlxTween.tween(this.scale, { x: 1.5, y: 0.1 }, 0.25, { ease: FlxEase.bounceInOut, onComplete: finishKill });
         FlxTween.tween(this.scale, { x: 1.5, y: 0.1 }, 0.5, { ease: FlxEase.bounceOut, onComplete: finishKill });
 
-        var hitSounds = 
+        var hitSounds =
         [
             AssetPaths.hit1__wav,
             AssetPaths.hit2__wav
