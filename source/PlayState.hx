@@ -157,7 +157,7 @@ class PlayState extends FlxState
 		// 25% to drop battery
 		if (FlxG.random.int(0, 3) == 0)
 		{
-			var battery = new Battery(this, _player, enemy.getGraphicMidpoint().x, enemy.getGraphicMidpoint().y);
+			var battery = new Battery(this, _player, enemy.getGraphicMidpoint().x, enemy.getPosition().y + enemy.height - 4);
 			battery.killed(function(battery:Battery)
 			{
 				remove(battery);
