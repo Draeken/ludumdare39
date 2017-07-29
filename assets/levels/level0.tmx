@@ -47,10 +47,10 @@
   <object id="20" name="top" x="833" y="1.5" width="94" height="13"/>
  </objectgroup>
  <objectgroup color="#ebd423" name="BatterySpawners">
-  <object id="5" x="100" y="572" width="248" height="1"/>
-  <object id="9" x="675" y="571.5" width="248" height="1"/>
-  <object id="10" x="833" y="284.5" width="93" height="1"/>
-  <object id="11" x="96.5" y="283.5" width="93" height="1"/>
-  <object id="16" x="417.5" y="412.5" width="189" height="1"/>
+  <object id="5" x="138.931" y="572" width="175.329" height="1"/>
+  <object id="9" x="713.93" y="571.5" width="174.031" height="1"/>
+  <object id="10" x="866.74" y="284.5" width="32" height="1"/>
+  <object id="11" x="128.942" y="283.5" width="33.3062" height="1"/>
+  <object id="16" x="457.729" y="413.5" width="112.436" height="1"/>
  </objectgroup>
 </map>

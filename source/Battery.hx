@@ -19,7 +19,10 @@ class Battery extends FlxSprite
         _playState = playState;
         _player = player;
 
-        loadGraphic(AssetPaths.battery__png, false, 16, 8);
+        loadGraphic(AssetPaths.battery__png, false);
+
+        origin.y = height;
+        setPosition(x, y - height);
     }
 
     override public function update(elapsed:Float):Void
