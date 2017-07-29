@@ -31,7 +31,7 @@ class Player extends FlxSprite
 
         _playState = playState;
 
-        loadGraphic(AssetPaths.player__png, false);
+        loadGraphic(AssetPaths.player__png, true, 32, 48);
 
         setFacingFlip(FlxObject.LEFT, false, false);
         setFacingFlip(FlxObject.RIGHT, true, false);
@@ -74,12 +74,14 @@ class Player extends FlxSprite
 		{
             acceleration.x = -drag.x;
             _direction = -1;
+            facing = FlxObject.RIGHT;
 		}
 
 		if (FlxG.keys.anyPressed([RIGHT, D]))
 		{
             acceleration.x = drag.x;
             _direction = 1;
+            facing = FlxObject.LEFT;
 		}
 
         jump(elapsed);
