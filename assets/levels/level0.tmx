@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="32" tileheight="32" nextobjectid="10">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="32" tileheight="32" nextobjectid="9">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="../tilesheets/tiles.png" trans="ffffff" width="96" height="32"/>
  </tileset>
@@ -35,11 +35,10 @@
   <object id="6" x="420" y="455" width="32" height="48"/>
  </objectgroup>
  <objectgroup color="#d80505" name="MobSpawners">
-  <object id="1" x="954" y="697" width="32" height="32"/>
-  <object id="4" x="44" y="693" width="32" height="32"/>
+  <object id="1" x="922" y="639" width="32" height="32"/>
+  <object id="4" x="72" y="641" width="32" height="32"/>
  </objectgroup>
  <objectgroup color="#ebd423" name="BatterySpawners">
-  <object id="5" x="92.491" y="711.061" width="662.677" height="16.4277"/>
-  <object id="9" x="207.985" y="615.032" width="34.5954" height="16.4277"/>
+  <object id="5" x="256" y="689" width="32" height="32"/>
  </objectgroup>
 </map>
