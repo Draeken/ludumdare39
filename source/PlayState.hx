@@ -103,11 +103,6 @@ class PlayState extends FlxState
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
-		_energy--;
-
-		if (_energy <= 0)
-			_energy = 1000;
-
  		_hud.updateHUD(_player.getEnergy());
 	}
 
