@@ -30,7 +30,6 @@ class PlayState extends FlxState
 
 	// HUD
 	private var _hud:HUD;
-	private var _energy:Int = 1000;
 
 	private var _bullets:FlxTypedGroup<Bullet>;
 
@@ -105,12 +104,7 @@ class PlayState extends FlxState
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
-		_energy--;
-
-		if (_energy <= 0)
-			_energy = 1000;
-
- 		_hud.updateHUD(_energy);
+ 		_hud.updateHUD(_player.getEnergy());
 	}
 
 	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
@@ -167,9 +161,7 @@ class PlayState extends FlxState
 		if ((player.justTouched(FlxObject.WALL) && enemy.justTouched(FlxObject.WALL)) ||
 			(player.justTouched(FlxObject.UP) && enemy.justTouched(FlxObject.FLOOR)))
 		{
-			player.kill();
-			FlxG.camera.shake(.02, 0.5);
-			_playerReviveTimer.start(3, playerRespawn, 1);
+			killPlayer();
 		}
 		else if (player.justTouched(FlxObject.DOWN) && enemy.justTouched(FlxObject.UP))
 		{
@@ -227,10 +219,25 @@ class PlayState extends FlxState
 		_bullets.add(new Bullet(x, y, direction));
 	}
 
-	public function addEnergy(v:Int):Void
+	public function addEnergy(v:Int)
 	{
-		var maxEnergy:Float = 1000;
+		_player.addEnergy(v);
+	}
 
-		_energy = cast Math.min(_energy + v, maxEnergy);
+	public function killPlayer()
+	{
+		_player.kill();
+		FlxG.camera.shake(.02, 0.5);
+		_playerReviveTimer.start(3, playerRespawn, 1);
+	}
+
+	public function decreaseEnergy(v: Float)
+	{
+		_player.decreaseEnergy(v);
+
+		if (v >= 3)
+		{
+			// HUD 
+		}
 	}
 }
