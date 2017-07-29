@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="32" tileheight="32" nextobjectid="21">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="32" height="26" tilewidth="32" tileheight="32" nextobjectid="21">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="../tilesheets/tiles.png" trans="ffffff" width="96" height="32"/>
  </tileset>
- <layer name="Walls" width="32" height="24">
+ <layer name="Walls" width="32" height="26">
   <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3,3,3,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,3,3,3,
 3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
 3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
@@ -28,29 +29,30 @@
 3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
 3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
 3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
-3,3,3,3,3,3,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,3,3,3,3,3,3
+3,3,3,3,3,3,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,3,3,3,3,3,3,
+0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0
 </data>
  </layer>
  <objectgroup color="#1d9c2c" name="Player">
-  <object id="6" x="497" y="141" width="32" height="48"/>
+  <object id="6" x="497" y="173" width="32" height="48"/>
  </objectgroup>
  <objectgroup color="#d80505" name="MobSpawners">
-  <object id="1" x="951" y="49" width="32" height="32"/>
-  <object id="4" x="39" y="48" width="32" height="32"/>
-  <object id="17" x="863" y="163" width="32" height="32"/>
-  <object id="18" x="127" y="164" width="32" height="32"/>
+  <object id="1" x="951" y="81" width="32" height="32"/>
+  <object id="4" x="39" y="80" width="32" height="32"/>
+  <object id="17" x="863" y="195" width="32" height="32"/>
+  <object id="18" x="127" y="196" width="32" height="32"/>
  </objectgroup>
  <objectgroup color="#4b4eea" name="TP">
-  <object id="12" name="bottom" x="193" y="751" width="92" height="13"/>
-  <object id="15" name="top" x="96.5" y="2.5" width="94" height="13"/>
-  <object id="19" name="bottom" x="737" y="751.5" width="92" height="13"/>
-  <object id="20" name="top" x="833" y="1.5" width="94" height="13"/>
+  <object id="12" name="bottom" x="194" y="823" width="92" height="6"/>
+  <object id="15" name="top" x="96.5" y="3.5" width="94" height="4"/>
+  <object id="19" name="bottom" x="737" y="822.5" width="92" height="6"/>
+  <object id="20" name="top" x="833" y="2.5" width="94" height="5"/>
  </objectgroup>
  <objectgroup color="#ebd423" name="BatterySpawners">
-  <object id="5" x="138.931" y="572" width="175.329" height="1"/>
-  <object id="9" x="713.93" y="571.5" width="174.031" height="1"/>
-  <object id="10" x="866.74" y="284.5" width="32" height="1"/>
-  <object id="11" x="128.942" y="283.5" width="33.3062" height="1"/>
-  <object id="16" x="457.729" y="413.5" width="112.436" height="1"/>
+  <object id="5" x="138.931" y="604" width="175.329" height="1"/>
+  <object id="9" x="713.93" y="603.5" width="174.031" height="1"/>
+  <object id="10" x="866.74" y="316.5" width="32" height="1"/>
+  <object id="11" x="128.942" y="315.5" width="33.3062" height="1"/>
+  <object id="16" x="457.729" y="445.5" width="112.436" height="1"/>
  </objectgroup>
 </map>

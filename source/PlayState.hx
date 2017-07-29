@@ -9,7 +9,6 @@ import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.tile.FlxTilemap;
 import flixel.FlxObject;
 import flixel.FlxG;
-import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxTimer;
 
@@ -77,8 +76,6 @@ class PlayState extends FlxState
 
 		add(_player);
 
-		FlxG.camera.follow(_player, FlxCameraFollowStyle.PLATFORMER, 1);
-
 	 	_hud = new HUD();
  		add(_hud);
 
@@ -116,7 +113,7 @@ class PlayState extends FlxState
 	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
 	{
 		var destTp:Teleporter = teleporter.type == "top" ? FlxG.random.getObject(_bottomTeleporters) : FlxG.random.getObject(_topTeleporters);
-		var offset:Int = teleporter.type == "top" ? -32 : 32;
+		var offset:Int = teleporter.type == "top" ? -62 : 32;
 		entity.y = destTp.y + offset;
 		entity.x = destTp.x;
 	}
