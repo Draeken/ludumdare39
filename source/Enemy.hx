@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.FlxObject;
 
 class Enemy extends FlxSprite
 {
@@ -15,7 +16,8 @@ class Enemy extends FlxSprite
     public function new(?x:Float = 0, ?y:Float = 0)
     {
         super(x, y);
-        loadGraphic(AssetPaths.enemy1__png, false);
+        loadGraphic(AssetPaths.enemy1__png, true, 32, 48);
+
         setFacingFlip(FlxObject.LEFT, false, false);
         setFacingFlip(FlxObject.RIGHT, true, false);
 
@@ -24,6 +26,10 @@ class Enemy extends FlxSprite
         _direction = FlxG.random.sign(50);
         velocity.x = _speed * _direction;
         origin.y = height;
+
+        color = 0xff0000;
+
+        updateFacing();
     }
 
     override public function update(elapsed:Float):Void
@@ -35,6 +41,13 @@ class Enemy extends FlxSprite
     {
         _direction *= -1;
         velocity.x = _speed * _direction;
+
+        updateFacing();
+    }
+
+    private function updateFacing()
+    {
+        facing = (_direction == -1) ? FlxObject.RIGHT : FlxObject.LEFT;
     }
 
     public function resetTest():Void
