@@ -86,6 +86,11 @@ class PlayState extends FlxState
 			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
 		}
 
+		for (bullet in _bullets)
+		{
+			FlxG.collide(bullet, _mWalls, onBulletTouchWall);
+		}
+
 		_energy--;
 
 		if (_energy <= 0)
@@ -132,6 +137,11 @@ class PlayState extends FlxState
 			player.velocity.y = -100;
 			enemy.kill();
 		}
+	}
+
+	private function onBulletTouchWall(bullet:Bullet, wall:FlxObject):Void
+	{
+		bullet.kill();
 	}
 
 	private function onEnemyTouchBullet(enemy:Enemy, bullet:Bullet):Void

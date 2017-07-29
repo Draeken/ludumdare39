@@ -111,7 +111,6 @@ class Player extends FlxSprite
             {
                 velocity.y = -JUMP_FACTOR * maxVelocity.y;
             }
-
         }
         else
         {
@@ -124,7 +123,11 @@ class Player extends FlxSprite
         if (FlxG.keys.justPressed.X)
         {
             var offset:Float = velocity.x / maxVelocity.x;
-            _playState.addBullet(x + _direction * ((width / 2.0) + offset), y + (height / 2.0), _direction);
+
+            if (_direction == 1)
+                offset += width / 2.0;
+
+            _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }
