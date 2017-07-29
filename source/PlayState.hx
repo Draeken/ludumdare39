@@ -24,6 +24,10 @@ class PlayState extends FlxState
 
 	private var _playerReviveTimer:FlxTimer;
 
+	// HUD
+	private var _hud:HUD;
+	private var _energy:Int = 1000;
+
 	private var _bullets:FlxTypedGroup<Bullet>;
 
 	override public function create():Void
@@ -62,6 +66,9 @@ class PlayState extends FlxState
 
 		FlxG.camera.follow(_player, FlxCameraFollowStyle.PLATFORMER, 1);
 
+	 	_hud = new HUD();
+ 		add(_hud);
+
 		super.create();
 	}
 
@@ -76,6 +83,13 @@ class PlayState extends FlxState
 			FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
 			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
 		}
+
+		_energy--;
+
+		if (_energy <= 0)
+			_energy = 1000;
+
+ 		_hud.updateHUD(_energy);
 	}
 
 	private function placeSpawn(e: TiledObject):Void
