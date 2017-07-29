@@ -47,7 +47,7 @@
     public function updateHUD(Energy:Int = 0):Void
     {
         var percent = cast(Energy, Float) / _batteryMaxEnergyValue;
-        _batteryEnergyText.text = Std.string(cast(percent * 100, Int)) + "%";
+        _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
         _batteryContentSprite.scale.y = percent;
     }
  }

@@ -111,7 +111,7 @@ class PlayState extends FlxState
 
 	private function placeBatterySpawners(layer:TiledObjectLayer):Void
 	{
-		var batterySpawner = new BatterySpawner(_player);
+		var batterySpawner = new BatterySpawner(this, _player);
 
 		for (obj in layer.objects)
 			batterySpawner.addTile(obj);
@@ -135,7 +135,7 @@ class PlayState extends FlxState
 		else if (player.justTouched(FlxObject.DOWN) && enemy.justTouched(FlxObject.UP))
 		{
 			player.velocity.y = -100;
-			enemy.kill();
+			killEnemy(enemy);
 		}
 	}
 
@@ -146,8 +146,25 @@ class PlayState extends FlxState
 
 	private function onEnemyTouchBullet(enemy:Enemy, bullet:Bullet):Void
 	{
-		enemy.kill();
+		killEnemy(enemy);
 		bullet.kill();
+	}
+
+	private function killEnemy(enemy:Enemy)
+	{
+		enemy.kill();
+
+		// 25% to drop battery
+		if (FlxG.random.int(0, 3) == 0)
+		{
+			var battery = new Battery(this, _player, enemy.getGraphicMidpoint().x, enemy.getGraphicMidpoint().y);
+			battery.killed(function(battery:Battery)
+			{
+				remove(battery);
+			});
+
+			add(battery);
+		}
 	}
 
 	private function playerRespawn(timer:FlxTimer):Void
@@ -169,5 +186,12 @@ class PlayState extends FlxState
 	public function addBullet(x:Float, y:Float, direction:Int):Void
 	{
 		_bullets.add(new Bullet(x, y, direction));
+	}
+
+	public function addEnergy(v:Int):Void
+	{
+		var maxEnergy:Float = 1000;
+
+		_energy = cast Math.min(_energy + v, maxEnergy);
 	}
 }

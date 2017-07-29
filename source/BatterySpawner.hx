@@ -17,6 +17,7 @@ class Vec2
 
 class BatterySpawner extends FlxGroup
 {
+    private var _playState:PlayState;    
     private var _player:Player;
 
     private var _tiles:Array<TiledObject>;
@@ -24,10 +25,11 @@ class BatterySpawner extends FlxGroup
 
     private var _spawnTimer:FlxTimer;
 
-    public function new(player:Player)
+    public function new(playState:PlayState, player:Player)
     {
         super();
 
+        _playState = playState;
         _player = player;
 
         _tiles = new Array<TiledObject>();
@@ -43,18 +45,6 @@ class BatterySpawner extends FlxGroup
     override public function update(elapsed:Float):Void
     {
         super.update(elapsed);
-
-        if (_battery != null)
-            FlxG.overlap(_player, _battery, this.onPlayerBatteryOverlap);
-    }
-
-    private function onPlayerBatteryOverlap(player:Player, battery:Battery):Void
-    {
-        _battery.apply(_player);
-    
-        despawnBattery();
-
-        resetSpawnTimer();
     }
 
     private function resetSpawnTimer():Void
@@ -71,13 +61,18 @@ class BatterySpawner extends FlxGroup
 
         FlxG.log.notice("Battery spawned at" + position.x + position.y);
 
-        _battery = new Battery(_player, position.x, position.y);
-        this.add(_battery);
+        _battery = new Battery(_playState, _player, position.x, position.y);
+        _battery.killed(function(battery:Battery)
+        {
+            despawnBattery(battery);
+            resetSpawnTimer();
+        });
+        add(_battery);
     }
 
-    private function despawnBattery():Void
+    private function despawnBattery(battery:Battery):Void
     {
-        this.remove(_battery);
+        remove(battery);
         _battery = null;
     }
 
