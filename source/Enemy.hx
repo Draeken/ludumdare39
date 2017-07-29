@@ -21,7 +21,7 @@ class Enemy extends FlxSprite
 
         _speed = 250;
 		acceleration.y = GRAVITY;
-        _direction = 1;
+        _direction = FlxG.random.sign(50);
         velocity.x = _speed * _direction;
         origin.y = height;
     }
@@ -44,6 +44,9 @@ class Enemy extends FlxSprite
 
     override public function kill():Void
     {
+        if (!alive)
+            return;
+
         alive = false;
         velocity.x = 0;
 
