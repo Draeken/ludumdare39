@@ -13,7 +13,7 @@ class Bullet extends FlxSprite
     {
         super(x, y);
         loadGraphic(AssetPaths.bulletsheet__png, true, 8, 8);
-        animation.add("forward", [0, 1, 2, 3, 4], 6, true);
+        animation.add("forward", [0, 1, 2, 3, 4], 20, true);
         _direction = direction;
         velocity.x = _speed * _direction;
     }
