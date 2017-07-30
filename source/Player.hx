@@ -68,7 +68,7 @@ class Player extends FlxSprite
     {
         movement(elapsed);
         shoot();
-        _playState.decreaseEnergy(elapsed * 10);
+        _playState.decreaseEnergy(elapsed * 5);
 
         super.update(elapsed);
     }
@@ -101,7 +101,7 @@ class Player extends FlxSprite
 		}
 
         if (acceleration.x != 0)
-            _playState.decreaseEnergy(3);
+            _playState.decreaseEnergy(elapsed * 50);
 
         jump(elapsed);
 

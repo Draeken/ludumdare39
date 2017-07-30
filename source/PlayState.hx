@@ -37,6 +37,7 @@ class PlayState extends FlxState
 
 	override public function create():Void
 	{
+		FlxG.mouse.visible = false;
 		_map = new TiledMap(AssetPaths.level0__tmx);
 		_mWalls = new FlxTilemap();
 		_mWalls.loadMapFromArray(cast(_map.getLayer("Walls"), TiledTileLayer).tileArray, _map.width,
@@ -260,7 +261,8 @@ class PlayState extends FlxState
 
 		if (v >= 3)
 		{
-			// HUD 
+			// HUD
+			_hud.shakeBattery(1, 1);
 		}
 	}
 }
