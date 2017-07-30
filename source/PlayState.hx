@@ -17,6 +17,7 @@ class PlayState extends FlxState
 {
 	private var _map:TiledMap;
 	private var _mWalls:FlxTilemap;
+	private var _mBackground:FlxTilemap;
 	private var _player:Player;
 	private var _grpEnemySpawners:FlxTypedGroup<EnemySpawner>;
 
@@ -39,13 +40,21 @@ class PlayState extends FlxState
 	{
 		_map = new TiledMap(AssetPaths.level0__tmx);
 		_mWalls = new FlxTilemap();
+		_mBackground = new FlxTilemap();
 		_mWalls.loadMapFromArray(cast(_map.getLayer("Walls"), TiledTileLayer).tileArray, _map.width,
+			_map.height, AssetPaths.tiles__png, _map.tileWidth, _map.tileHeight,
+			FlxTilemapAutoTiling.OFF, 1, 1, 3);
+		_mBackground.loadMapFromArray(cast(_map.getLayer("Background"), TiledTileLayer).tileArray, _map.width,
 			_map.height, AssetPaths.tiles__png, _map.tileWidth, _map.tileHeight,
 			FlxTilemapAutoTiling.OFF, 1, 1, 3);
 		_mWalls.setTileProperties(2, FlxObject.NONE);
 		_mWalls.setTileProperties(3, FlxObject.ANY);
+		_mBackground.setTileProperties(2, FlxObject.NONE);
+		_mBackground.setTileProperties(3, FlxObject.ANY);
 
+		add(_mBackground);
 		add(_mWalls);
+
 
 		_enemies = new FlxTypedGroup<Enemy>();
 		add(_enemies);
@@ -260,7 +269,7 @@ class PlayState extends FlxState
 
 		if (v >= 3)
 		{
-			// HUD 
+			// HUD
 		}
 	}
 }
