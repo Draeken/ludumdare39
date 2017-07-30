@@ -4,6 +4,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.math.FlxVelocity;
+import flixel.math.FlxMath;
 
 class Battery extends FlxSprite
 {
@@ -29,7 +31,26 @@ class Battery extends FlxSprite
     {
         super.update(elapsed);
 
+        followPlayer();
+
         FlxG.overlap(_player, this, this.onPlayerOverlap);
+    }
+
+    public function followPlayer()
+    {
+        if (FlxMath.distanceBetween(this, _player) < 100)
+        {
+            var playerPosition = _player.getPosition();
+            playerPosition.x += _player.origin.x;
+            playerPosition.y += _player.origin.y;
+
+            FlxVelocity.moveTowardsPoint(this, playerPosition, Std.int(100));
+        }
+        else
+        {
+            velocity.x = 0;
+            velocity.y = 0;
+        }
     }
 
     public function apply(player:Player):Void
