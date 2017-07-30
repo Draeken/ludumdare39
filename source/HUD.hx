@@ -17,6 +17,7 @@ class HUD extends FlxTypedGroup<FlxSprite>
     private var _batteryContainerSprite:FlxSprite;
     private var _batteryContentSprite:FlxSprite;
     private var _batteryEnergyText:FlxText;
+    private var _batteryFlashSprite:FlxSprite;
 
     private var _batteryMaxEnergyValue:Int;
     private var _batteryContentInitialHeight:Int;
@@ -50,11 +51,18 @@ class HUD extends FlxTypedGroup<FlxSprite>
         _batteryContentSprite.origin.set(_batteryContentSprite.width / 2, _batteryContentSprite.height);
         _actualBatteryContentSpriteScaleY = 1;
 
+        _batteryFlashSprite = new FlxSprite().makeGraphic(cast(_batteryInitialPosition.x, Int), cast(_batteryInitialPosition.y, Int), FlxColor.WHITE);
+        _batteryFlashSprite.x = FlxG.width - 50;
+        _batteryFlashSprite.y = 20;
+        _batteryFlashSprite.origin.set(_batteryFlashSprite.width / 2, _batteryFlashSprite.height);
+
         _batteryEnergyText = new FlxText(FlxG.width - 50, 5, 0, "", 8);
         _batteryEnergyText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
 
         add(_batteryContentSprite);
         add(_batteryEnergyText);
+        add(_batteryFlashSprite);
+        _batteryFlashSprite.visible = false;
 
         _scoreText = new FlxText(FlxG.width / 2, 50, 0, "Score 0", 16);
         _scoreText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
@@ -95,8 +103,12 @@ class HUD extends FlxTypedGroup<FlxSprite>
             if (_shakeDuration > 0)
             {
                 _shakeDuration -= elapsed;
-                _batteryContentSprite.x = _batteryInitialPosition.x + (FlxG.random.float(1, 5) * _shakeIntensity);
-                _batteryContentSprite.y = _batteryInitialPosition.y + (FlxG.random.float(1, 5) * _shakeIntensity);
+                var xOffset = FlxG.random.float(1, 5);
+                var yOffset = FlxG.random.float(1, 5);
+                _batteryContentSprite.x = _batteryInitialPosition.x + (xOffset * _shakeIntensity);
+                _batteryContentSprite.y = _batteryInitialPosition.y + (yOffset * _shakeIntensity);
+                _batteryFlashSprite.x = _batteryInitialPosition.x + (xOffset * _shakeIntensity);
+                _batteryFlashSprite.y = _batteryInitialPosition.y + (yOffset * _shakeIntensity);
             }
             else
             {
@@ -104,6 +116,8 @@ class HUD extends FlxTypedGroup<FlxSprite>
                 _shakeDuration = 0;
                 _batteryContentSprite.x = _batteryInitialPosition.x;
                 _batteryContentSprite.y = _batteryInitialPosition.y;
+                _batteryFlashSprite.x = _batteryInitialPosition.x;
+                _batteryFlashSprite.y = _batteryInitialPosition.y;
             }
         }
 
@@ -113,19 +127,16 @@ class HUD extends FlxTypedGroup<FlxSprite>
     public function setEnergy(energy:Float = 0):Void
     {
         var percent = energy / _batteryMaxEnergyValue;
-        
-        // if (_lastEnergy > energy && (_lastEnergy - energy) > 5)
-        // {
-        //     _batteryContentTween = FlxTween.tween(_batteryContentSprite.scale, { y: percent }, 0.5, { ease: FlxEase.bounceOut, onComplete: batteryAnimationFinished });
-        //     // FlxTween.color(_batteryContentSprite, 0.5, _batteryContentSprite.color, 0xff0000, { ease: FlxEase.bounceOut });
-        // }
-        // else
-        // {
-        //     if (_batteryContentTween == null || (_batteryContentTween != null && _batteryContentTween.finished))
-        //         _batteryContentSprite.scale.y = percent;
-        // }
+
+        if (_lastEnergy > energy && (_lastEnergy - energy) >= 10)
+        {
+            _batteryFlashSprite.visible = true;
+            _batteryFlashSprite.alpha = 0;
+            FlxTween.tween(_batteryFlashSprite, { alpha: 1 }, 0.25, { ease: FlxEase.cubeInOut, onComplete: flashAnimationComplete });
+        }
 
         _batteryContentSprite.scale.y = percent;
+        _batteryFlashSprite.scale.y = percent;
         _actualBatteryContentSpriteScaleY = percent;
 
         _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
@@ -140,9 +151,9 @@ class HUD extends FlxTypedGroup<FlxSprite>
         _lastEnergy = energy;
     }
 
-    private function batteryAnimationFinished(_):Void
+    private function flashAnimationComplete(_):Void
     {
-        _batteryContentSprite.scale.y = _actualBatteryContentSpriteScaleY;
+        _batteryFlashSprite.visible = false;
     }
 
     public function shakeBattery(Intensity:Float, Duration:Float)

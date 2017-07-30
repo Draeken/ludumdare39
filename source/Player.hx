@@ -28,8 +28,7 @@ class Player extends FlxSprite
     private var _maxEnergy:Float = 1000;
 	private var _energy:Float = 1000;
 
-    private var _chargingShot:Bool = false;
-    private var _chargingShotAmount:Float = 1;
+    private var _shotKeyPressedTime:Float = 0;
 
     public function new(playState:PlayState, ?x:Float = 0, ?y:Float = 0)
     {
@@ -130,7 +129,7 @@ class Player extends FlxSprite
     {
         if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
         {
-            _playState.decreaseEnergy(10);
+            _playState.decreaseEnergy(5);
             
             FlxG.sound.play(AssetPaths.jump__wav);
             _timesJumped++;
@@ -164,7 +163,7 @@ class Player extends FlxSprite
 
         if (FlxG.keys.justPressed.X)
         {
-            _playState.decreaseEnergy(50);
+            _playState.decreaseEnergy(10);
             
             var offset:Float = velocity.x / maxVelocity.x;
 
@@ -184,22 +183,21 @@ class Player extends FlxSprite
         }
         else if (FlxG.keys.pressed.X)
         {
-            _chargingShot = true;
-
-            _chargingShotAmount = Math.min(_chargingShotAmount + elapsed * 3, 5);
+            _shotKeyPressedTime += elapsed;
         }
         else if (FlxG.keys.justReleased.X)
         {
-            if (_chargingShot)
+            if (_shotKeyPressedTime > 0.3)
             {
-                _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction, _chargingShotAmount);
+                var chargingShotAmount:Float = Math.min(1 + _shotKeyPressedTime * 3, 5);
 
-                decreaseEnergy(_chargingShotAmount * 100);
-                FlxG.log.notice("Charging shot amount: " + Std.string(_chargingShotAmount * 10));
+                _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction, chargingShotAmount);
+
+                decreaseEnergy(chargingShotAmount * 50);
+                FlxG.log.notice("Charging shot amount: " + Std.string(chargingShotAmount * 10));
             }
 
-            _chargingShot = false;
-            _chargingShotAmount = 1;
+            _shotKeyPressedTime = 0;
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }
