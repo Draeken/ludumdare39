@@ -247,9 +247,9 @@ class PlayState extends FlxState
 		_bullets.add(new Bullet(x, y, direction));
 	}
 
-	public function addMegaBullet(x:Float, y:Float, direction:Int):Void
+	public function addMegaBullet(x:Float, y:Float, direction:Int, scale:Float):Void
 	{
-		_megaBullets.add(new MegaBullet(x, y, direction));
+		_megaBullets.add(new MegaBullet(x, y, direction, scale));
 	}
 
 	public function addEnergy(v:Int)

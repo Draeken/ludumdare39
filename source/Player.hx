@@ -28,6 +28,9 @@ class Player extends FlxSprite
     private var _maxEnergy:Float = 1000;
 	private var _energy:Float = 1000;
 
+    private var _chargingShot:Bool = false;
+    private var _chargingShotAmount:Float = 1;
+
     public function new(playState:PlayState, ?x:Float = 0, ?y:Float = 0)
     {
         super(x, y);
@@ -67,7 +70,7 @@ class Player extends FlxSprite
     override public function update(elapsed:Float):Void
     {
         movement(elapsed);
-        shoot();
+        shoot(elapsed);
         _playState.decreaseEnergy(elapsed * 5);
 
         super.update(elapsed);
@@ -152,7 +155,7 @@ class Player extends FlxSprite
         }
     }
 
-    private function shoot():Void
+    private function shoot(elapsed:Float):Void
     {
         var offset:Float = velocity.x / maxVelocity.x;
 
@@ -179,11 +182,24 @@ class Player extends FlxSprite
             
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
-
-        if (FlxG.keys.justPressed.C)
+        else if (FlxG.keys.pressed.X)
         {
-            _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction);
-            
+            _chargingShot = true;
+
+            _chargingShotAmount = Math.min(_chargingShotAmount + elapsed * 3, 5);
+        }
+        else if (FlxG.keys.justReleased.X)
+        {
+            if (_chargingShot)
+            {
+                _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction, _chargingShotAmount);
+
+                decreaseEnergy(_chargingShotAmount * 100);
+                FlxG.log.notice("Charging shot amount: " + Std.string(_chargingShotAmount * 10));
+            }
+
+            _chargingShot = false;
+            _chargingShotAmount = 1;
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }
