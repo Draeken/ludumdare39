@@ -13,6 +13,7 @@ class Battery extends FlxSprite
     private var _player:Player;
 
     private var _killedCallback:Dynamic->Void;
+    private var _applied:Bool = false;
 
     public function new(playState:PlayState, player:Player, ?x:Float = 0, ?y:Float = 0)
     {
@@ -55,9 +56,14 @@ class Battery extends FlxSprite
 
     public function apply(player:Player):Void
     {
+        if (_applied)
+            return;
+
         _playState.addEnergy(200);
         _playState.addScore(1000);
         FlxG.sound.play(AssetPaths.battery__wav);
+
+        _applied = true;
     }
 
     private function onPlayerOverlap(player:Player, battery:Battery):Void
