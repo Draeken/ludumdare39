@@ -108,21 +108,12 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		FlxG.collide(_player, _mWalls);
-
-		for (enemy in _enemies)
-		{
-			FlxG.collide(enemy, _mWalls, onEnemyCollideWall);
-			FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
-			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
-			FlxG.overlap(enemy, _megaBullets, onEnemyTouchMegaBullet);
-		}
-
-		for (bullet in _bullets)
-			FlxG.collide(bullet, _mWalls, onBulletTouchWall);
-
-		for (megaBullet in _megaBullets)
-			FlxG.collide(megaBullet, _mWalls, onMegaBulletTouchWall);
-
+		FlxG.collide(_enemies, _mWalls, onEnemyCollideWall);
+		FlxG.overlap(_player, _enemies, onPlayerTouchEnemy);
+		FlxG.overlap(_enemies, _bullets, onEnemyTouchBullet);
+		FlxG.overlap(_enemies, _megaBullets, onEnemyTouchMegaBullet);
+		FlxG.collide(_bullets, _mWalls, onBulletTouchWall);
+		FlxG.collide(_megaBullets, _mWalls, onMegaBulletTouchWall);
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
