@@ -24,7 +24,7 @@ class EnemySpawner extends FlxSprite
 
     private function spawnEnemy(timer:FlxTimer):Void
     {
-        timer.reset(FlxG.random.int(10, 50));
+        timer.reset(FlxG.random.int(2, 6));
         _playState.addEnemy(this.x, this.y);
     }
 }
