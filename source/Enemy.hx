@@ -69,8 +69,8 @@ class Enemy extends FlxSprite
 
         var hitSounds =
         [
-            AssetPaths.hit1__wav,
-            AssetPaths.hit2__wav
+            AssetPaths.hit1__ogg,
+            AssetPaths.hit2__ogg
         ];
 
         FlxG.sound.play(FlxG.random.getObject(hitSounds));

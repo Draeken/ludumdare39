@@ -61,7 +61,7 @@ class Battery extends FlxSprite
 
         _playState.addEnergy(200);
         _playState.addScore(1000);
-        FlxG.sound.play(AssetPaths.battery__wav);
+        FlxG.sound.play(AssetPaths.battery__ogg);
 
         _applied = true;
     }

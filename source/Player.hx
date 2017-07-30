@@ -153,7 +153,7 @@ class Player extends FlxSprite
 
             _playState.decreaseEnergy(5);
             
-            FlxG.sound.play(AssetPaths.jump__wav);
+            FlxG.sound.play(AssetPaths.jump__ogg);
             _timesJumped++;
             _jumpTime = 0;
         }
@@ -201,7 +201,7 @@ class Player extends FlxSprite
 
             _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
 
-            FlxG.sound.play(AssetPaths.shoot1__wav);
+            FlxG.sound.play(AssetPaths.shoot1__ogg);
         }
         else if (FlxG.keys.pressed.X)
         {
@@ -220,7 +220,7 @@ class Player extends FlxSprite
             }
 
             _shotKeyPressedTime = 0;
-            FlxG.sound.play(AssetPaths.shoot1__wav);
+            FlxG.sound.play(AssetPaths.shoot1__ogg);
         }
     }
 }

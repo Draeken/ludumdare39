@@ -107,6 +107,9 @@ class PlayState extends FlxState
 
 		_hud.setScore(0);
 
+		// Play music
+		FlxG.sound.playMusic(AssetPaths.music__ogg, 1, true);
+
 		super.create();
 	}
 
@@ -309,11 +312,14 @@ class PlayState extends FlxState
 		_batteries.clear();
 		
 		_batterySpawner.despawnBattery();
+
+		FlxG.sound.play(AssetPaths.death__ogg);
 	}
 
 	public function decreaseEnergy(v: Float)
 	{
 		_player.decreaseEnergy(v);
+
 
 		if (v >= 3)
 		{
