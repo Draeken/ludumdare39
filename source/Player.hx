@@ -154,6 +154,11 @@ class Player extends FlxSprite
 
     private function shoot():Void
     {
+        var offset:Float = velocity.x / maxVelocity.x;
+
+        if (_direction == 1)
+            offset += width / 2.0;
+
         if (FlxG.keys.justPressed.X)
         {
             _playState.decreaseEnergy(50);
@@ -171,6 +176,13 @@ class Player extends FlxSprite
                 _playState.addBullet(x + _direction * offset, y + (height / 2.0) + 16, _direction);
 
             _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
+            
+            FlxG.sound.play(AssetPaths.shoot1__wav);
+        }
+
+        if (FlxG.keys.justPressed.C)
+        {
+            _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction);
             
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }

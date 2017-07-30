@@ -34,6 +34,7 @@ class PlayState extends FlxState
 	private var _hud:HUD;
 
 	private var _bullets:FlxTypedGroup<Bullet>;
+	private var _megaBullets:FlxTypedGroup<MegaBullet>;
 
 	override public function create():Void
 	{
@@ -51,7 +52,6 @@ class PlayState extends FlxState
 		_enemies = new FlxTypedGroup<Enemy>();
 		add(_enemies);
 
-
 		_topTeleporters = [];
 		_bottomTeleporters = [];
 		_teleporters = new FlxTypedGroup<Teleporter>();
@@ -65,6 +65,10 @@ class PlayState extends FlxState
 
 		_bullets = new FlxTypedGroup<Bullet>();
 		add(_bullets);
+
+
+		_megaBullets = new FlxTypedGroup<MegaBullet>();
+		add(_megaBullets);
 
 		// Parse map
 		var tmpMapSpawn:TiledObjectLayer = cast _map.getLayer("Player");
@@ -99,12 +103,14 @@ class PlayState extends FlxState
 			FlxG.collide(enemy, _mWalls, onEnemyCollideWall);
 			FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
 			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
+			FlxG.overlap(enemy, _megaBullets, onEnemyTouchMegaBullet);
 		}
 
 		for (bullet in _bullets)
-		{
 			FlxG.collide(bullet, _mWalls, onBulletTouchWall);
-		}
+
+		for (megaBullet in _megaBullets)
+			FlxG.collide(megaBullet, _mWalls, onMegaBulletTouchWall);
 
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
@@ -180,10 +186,20 @@ class PlayState extends FlxState
 		bullet.kill();
 	}
 
+	private function onMegaBulletTouchWall(megaBullet:MegaBullet, wall:FlxObject):Void
+	{
+		megaBullet.kill();
+	}
+
 	private function onEnemyTouchBullet(enemy:Enemy, bullet:Bullet):Void
 	{
 		killEnemy(enemy);
 		bullet.kill();
+	}
+
+	private function onEnemyTouchMegaBullet(enemy:Enemy, megaBullet:MegaBullet):Void
+	{
+		killEnemy(enemy);
 	}
 
 	private function killEnemy(enemy:Enemy)
@@ -229,6 +245,11 @@ class PlayState extends FlxState
 	public function addBullet(x:Float, y:Float, direction:Int):Void
 	{
 		_bullets.add(new Bullet(x, y, direction));
+	}
+
+	public function addMegaBullet(x:Float, y:Float, direction:Int):Void
+	{
+		_megaBullets.add(new MegaBullet(x, y, direction));
 	}
 
 	public function addEnergy(v:Int)
