@@ -31,7 +31,7 @@ class PlayState extends FlxState
 
 	private var _playerReviveTimer:FlxTimer;
 
-	private var _score:Int;
+	private var _score:Int = 0;
 
 	private var _gameOver:Bool = false;
 
