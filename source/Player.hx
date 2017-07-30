@@ -4,6 +4,8 @@ import flixel.input.keyboard.FlxKey;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 
 class Player extends FlxSprite
 {
@@ -133,6 +135,22 @@ class Player extends FlxSprite
     {
         if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
         {
+            if (!isTouching(FlxObject.FLOOR))
+            {
+                var s = new FlxSprite();
+                s.loadGraphic(AssetPaths.Shitty_xplozion__png, true, 48, 32);
+                s.alpha = 0.5;
+                s.centerOrigin();
+                s.scale.set(0.5, 0.5);
+                s.setPosition(getPosition().x - 9, getGraphicMidpoint().y - 8 + height / 2);
+                _playState.add(s);
+
+                FlxTween.tween(s, { alpha: 0, y: s.y + 10 }, 0.25, { ease:FlxEase.cubeInOut, onComplete: function(_)
+                {
+                    _playState.remove(s);
+                }});
+            }
+
             _playState.decreaseEnergy(5);
             
             FlxG.sound.play(AssetPaths.jump__wav);
