@@ -30,6 +30,8 @@ class PlayState extends FlxState
 
 	private var _score:Int;
 
+	private var _gameOver:Bool = false;
+
 	// HUD
 	private var _hud:HUD;
 
@@ -116,6 +118,13 @@ class PlayState extends FlxState
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
  		_hud.setEnergy(cast _player.getEnergy());
+
+		if (_gameOver && FlxG.keys.justPressed.X)
+		{
+			_gameOver = false;
+			_hud.gameOver(false, "");
+			playerRespawn();
+		}
 	}
 
 	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
@@ -172,7 +181,7 @@ class PlayState extends FlxState
 		if ((player.justTouched(FlxObject.WALL) && enemy.justTouched(FlxObject.WALL)) ||
 			(player.justTouched(FlxObject.UP) && enemy.justTouched(FlxObject.FLOOR)))
 		{
-			killPlayer();
+			killPlayer("Killed by an enemy :O");
 		}
 		else if (player.justTouched(FlxObject.DOWN) && enemy.justTouched(FlxObject.UP))
 		{
@@ -224,7 +233,7 @@ class PlayState extends FlxState
 		}
 	}
 
-	private function playerRespawn(timer:FlxTimer):Void
+	private function playerRespawn():Void
 	{
 		_player.respawn();
 
@@ -269,11 +278,13 @@ class PlayState extends FlxState
 		setScore(_score + v);
 	}
 
-	public function killPlayer()
+	public function killPlayer(reason:String = "Running out of energy!!")
 	{
 		_player.kill();
 		FlxG.camera.shake(.02, 0.5);
-		_playerReviveTimer.start(3, playerRespawn, 1);
+
+		_gameOver = true;
+		_hud.gameOver(true, reason);
 	}
 
 	public function decreaseEnergy(v: Float)

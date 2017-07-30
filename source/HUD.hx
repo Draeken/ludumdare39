@@ -19,7 +19,6 @@ class HUD extends FlxTypedGroup<FlxSprite>
     private var _batteryEnergyText:FlxText;
 
     private var _batteryMaxEnergyValue:Int;
-
     private var _batteryContentInitialHeight:Int;
 
     private var _lastEnergy:Float;
@@ -27,6 +26,9 @@ class HUD extends FlxTypedGroup<FlxSprite>
     private var _batteryContentTween:FlxTween;
 
     private var _scoreText:FlxText;
+    private var _gameOverText:FlxText;
+    private var _gameOverReasonText:FlxText;
+    private var _gameOverRetryText:FlxText;
     private var _shaking:Bool;
     private var _shakeIntensity:Float;
     private var _shakeDuration:Float;
@@ -56,8 +58,22 @@ class HUD extends FlxTypedGroup<FlxSprite>
 
         _scoreText = new FlxText(FlxG.width / 2, 50, 0, "Score 0", 16);
         _scoreText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
-
         add(_scoreText);
+
+        _gameOverText = new FlxText(FlxG.width / 2, FlxG.height / 2, 0, "GAME OVER", 128);
+        _gameOverText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
+        _gameOverText.screenCenter();
+        _gameOverText.y -= 64;
+
+        _gameOverReasonText = new FlxText(FlxG.width / 2, FlxG.height / 2, 0, "Running out of energy", 32);
+        _gameOverReasonText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
+        _gameOverReasonText.screenCenter();
+        _gameOverReasonText.y += 32;
+
+        _gameOverRetryText = new FlxText(FlxG.width / 2, FlxG.height / 2, 0, "Press the shoot key to retry", 16);
+        _gameOverRetryText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
+        _gameOverRetryText.screenCenter();
+        _gameOverRetryText.y += 96;
 
         // The UI sprites will stays at their position on the screen
         // even if the camera moves
@@ -98,16 +114,18 @@ class HUD extends FlxTypedGroup<FlxSprite>
     {
         var percent = energy / _batteryMaxEnergyValue;
         
-        if (_lastEnergy > energy && (_lastEnergy - energy) > 5)
-        {
-            _batteryContentTween = FlxTween.tween(_batteryContentSprite.scale, { y: percent }, 0.5, { ease: FlxEase.bounceOut, onComplete: batteryAnimationFinished });
-        }
-        else
-        {
-            if (_batteryContentTween == null || (_batteryContentTween != null && _batteryContentTween.finished))
-                _batteryContentSprite.scale.y = percent;
-        }
+        // if (_lastEnergy > energy && (_lastEnergy - energy) > 5)
+        // {
+        //     _batteryContentTween = FlxTween.tween(_batteryContentSprite.scale, { y: percent }, 0.5, { ease: FlxEase.bounceOut, onComplete: batteryAnimationFinished });
+        //     // FlxTween.color(_batteryContentSprite, 0.5, _batteryContentSprite.color, 0xff0000, { ease: FlxEase.bounceOut });
+        // }
+        // else
+        // {
+        //     if (_batteryContentTween == null || (_batteryContentTween != null && _batteryContentTween.finished))
+        //         _batteryContentSprite.scale.y = percent;
+        // }
 
+        _batteryContentSprite.scale.y = percent;
         _actualBatteryContentSpriteScaleY = percent;
 
         _batteryEnergyText.text = Std.string(cast(Math.ceil(percent * 100), Int)) + "%";
@@ -132,5 +150,23 @@ class HUD extends FlxTypedGroup<FlxSprite>
         // _shaking = true;
         // _shakeIntensity = Intensity;
         // _shakeDuration = Duration * 1000; // ms
+    }
+
+    public function gameOver(value:Bool, reason:String)
+    {
+        _gameOverReasonText.text = reason;
+
+        if (value)
+        {
+            add(_gameOverText);
+            add(_gameOverReasonText);
+            add(_gameOverRetryText);
+        }
+        else
+        {
+            remove(_gameOverText);
+            remove(_gameOverReasonText);
+            remove(_gameOverRetryText);
+        }
     }
 }
