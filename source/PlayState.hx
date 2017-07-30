@@ -187,7 +187,7 @@ class PlayState extends FlxState
 		if ((player.justTouched(FlxObject.WALL) && enemy.justTouched(FlxObject.WALL)) ||
 			(player.justTouched(FlxObject.UP) && enemy.justTouched(FlxObject.FLOOR)))
 		{
-			killPlayer("Killed by an enemy :O");
+			killPlayer("Killed by an enemy !");
 		}
 		else if (player.justTouched(FlxObject.DOWN) && enemy.justTouched(FlxObject.UP))
 		{
@@ -293,7 +293,7 @@ class PlayState extends FlxState
 		setScore(_score + v);
 	}
 
-	public function killPlayer(reason:String = "Running out of energy!!")
+	public function killPlayer(reason:String = "Running out of Power !")
 	{
 		_player.kill();
 		FlxG.camera.shake(.02, 0.5);

@@ -30,6 +30,7 @@ class HUD extends FlxTypedGroup<FlxSprite>
     private var _gameOverText:FlxText;
     private var _gameOverReasonText:FlxText;
     private var _gameOverRetryText:FlxText;
+    private var _gameOverScoreText:FlxText;
     private var _shaking:Bool;
     private var _shakeIntensity:Float;
     private var _shakeDuration:Float;
@@ -82,6 +83,9 @@ class HUD extends FlxTypedGroup<FlxSprite>
         _gameOverRetryText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
         _gameOverRetryText.screenCenter();
         _gameOverRetryText.y += 96;
+
+        _gameOverScoreText = new FlxText(FlxG.width / 2, FlxG.height / 2, 0, "Score 0", 64);
+        _gameOverScoreText.setBorderStyle(SHADOW, FlxColor.GRAY, 1, 1);
 
         // The UI sprites will stays at their position on the screen
         // even if the camera moves
@@ -166,18 +170,23 @@ class HUD extends FlxTypedGroup<FlxSprite>
     public function gameOver(value:Bool, reason:String)
     {
         _gameOverReasonText.text = reason;
+        _gameOverScoreText.text = _scoreText.text;
+        _gameOverScoreText.screenCenter();
+        _gameOverScoreText.y += 250;
 
         if (value)
         {
             add(_gameOverText);
             add(_gameOverReasonText);
             add(_gameOverRetryText);
+            add(_gameOverScoreText);
         }
         else
         {
             remove(_gameOverText);
             remove(_gameOverReasonText);
             remove(_gameOverRetryText);
+            remove(_gameOverScoreText);
         }
     }
 }
