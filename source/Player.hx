@@ -28,6 +28,9 @@ class Player extends FlxSprite
     private var _maxEnergy:Float = 1000;
 	private var _energy:Float = 1000;
 
+    private var _chargingShot:Bool = false;
+    private var _chargingShotAmount:Float = 1;
+
     public function new(playState:PlayState, ?x:Float = 0, ?y:Float = 0)
     {
         super(x, y);
@@ -67,8 +70,8 @@ class Player extends FlxSprite
     override public function update(elapsed:Float):Void
     {
         movement(elapsed);
-        shoot();
-        _playState.decreaseEnergy(elapsed * 10);
+        shoot(elapsed);
+        _playState.decreaseEnergy(elapsed * 5);
 
         super.update(elapsed);
     }
@@ -101,7 +104,7 @@ class Player extends FlxSprite
 		}
 
         if (acceleration.x != 0)
-            _playState.decreaseEnergy(3);
+            _playState.decreaseEnergy(elapsed * 50);
 
         jump(elapsed);
 
@@ -152,8 +155,13 @@ class Player extends FlxSprite
         }
     }
 
-    private function shoot():Void
+    private function shoot(elapsed:Float):Void
     {
+        var offset:Float = velocity.x / maxVelocity.x;
+
+        if (_direction == 1)
+            offset += width / 2.0;
+
         if (FlxG.keys.justPressed.X)
         {
             _playState.decreaseEnergy(50);
@@ -163,7 +171,35 @@ class Player extends FlxSprite
             if (_direction == 1)
                 offset += width / 2.0;
 
+            var energyPercent:Float = _energy / _maxEnergy;
+            if (energyPercent > 0.75)
+                _playState.addBullet(x + _direction * offset, y + (height / 2.0) - 16, _direction);
+
+            if (energyPercent > 0.3)
+                _playState.addBullet(x + _direction * offset, y + (height / 2.0) + 16, _direction);
+
             _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
+            
+            FlxG.sound.play(AssetPaths.shoot1__wav);
+        }
+        else if (FlxG.keys.pressed.X)
+        {
+            _chargingShot = true;
+
+            _chargingShotAmount = Math.min(_chargingShotAmount + elapsed * 3, 5);
+        }
+        else if (FlxG.keys.justReleased.X)
+        {
+            if (_chargingShot)
+            {
+                _playState.addMegaBullet(x + _direction * offset, y + (height / 2.0), _direction, _chargingShotAmount);
+
+                decreaseEnergy(_chargingShotAmount * 100);
+                FlxG.log.notice("Charging shot amount: " + Std.string(_chargingShotAmount * 10));
+            }
+
+            _chargingShot = false;
+            _chargingShotAmount = 1;
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }

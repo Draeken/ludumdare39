@@ -31,13 +31,17 @@ class PlayState extends FlxState
 
 	private var _score:Int;
 
+	private var _gameOver:Bool = false;
+
 	// HUD
 	private var _hud:HUD;
 
 	private var _bullets:FlxTypedGroup<Bullet>;
+	private var _megaBullets:FlxTypedGroup<MegaBullet>;
 
 	override public function create():Void
 	{
+		FlxG.mouse.visible = false;
 		_map = new TiledMap(AssetPaths.level0__tmx);
 		_mWalls = new FlxTilemap();
 		_mBackground = new FlxTilemap();
@@ -59,7 +63,6 @@ class PlayState extends FlxState
 		_enemies = new FlxTypedGroup<Enemy>();
 		add(_enemies);
 
-
 		_topTeleporters = [];
 		_bottomTeleporters = [];
 		_teleporters = new FlxTypedGroup<Teleporter>();
@@ -73,6 +76,10 @@ class PlayState extends FlxState
 
 		_bullets = new FlxTypedGroup<Bullet>();
 		add(_bullets);
+
+
+		_megaBullets = new FlxTypedGroup<MegaBullet>();
+		add(_megaBullets);
 
 		// Parse map
 		var tmpMapSpawn:TiledObjectLayer = cast _map.getLayer("Player");
@@ -107,17 +114,26 @@ class PlayState extends FlxState
 			FlxG.collide(enemy, _mWalls, onEnemyCollideWall);
 			FlxG.overlap(_player, enemy, onPlayerTouchEnemy);
 			FlxG.overlap(enemy, _bullets, onEnemyTouchBullet);
+			FlxG.overlap(enemy, _megaBullets, onEnemyTouchMegaBullet);
 		}
 
 		for (bullet in _bullets)
-		{
 			FlxG.collide(bullet, _mWalls, onBulletTouchWall);
-		}
+
+		for (megaBullet in _megaBullets)
+			FlxG.collide(megaBullet, _mWalls, onMegaBulletTouchWall);
 
 		FlxG.overlap(_player, _teleporters, onObjectTouchTeleporter);
 		FlxG.overlap(_enemies, _teleporters, onObjectTouchTeleporter);
 
  		_hud.setEnergy(cast _player.getEnergy());
+
+		if (_gameOver && FlxG.keys.justPressed.X)
+		{
+			_gameOver = false;
+			_hud.gameOver(false, "");
+			playerRespawn();
+		}
 	}
 
 	private function onObjectTouchTeleporter(entity:FlxObject, teleporter:Teleporter):Void
@@ -174,7 +190,7 @@ class PlayState extends FlxState
 		if ((player.justTouched(FlxObject.WALL) && enemy.justTouched(FlxObject.WALL)) ||
 			(player.justTouched(FlxObject.UP) && enemy.justTouched(FlxObject.FLOOR)))
 		{
-			killPlayer();
+			killPlayer("Killed by an enemy :O");
 		}
 		else if (player.justTouched(FlxObject.DOWN) && enemy.justTouched(FlxObject.UP))
 		{
@@ -188,10 +204,20 @@ class PlayState extends FlxState
 		bullet.kill();
 	}
 
+	private function onMegaBulletTouchWall(megaBullet:MegaBullet, wall:FlxObject):Void
+	{
+		megaBullet.kill();
+	}
+
 	private function onEnemyTouchBullet(enemy:Enemy, bullet:Bullet):Void
 	{
 		killEnemy(enemy);
 		bullet.kill();
+	}
+
+	private function onEnemyTouchMegaBullet(enemy:Enemy, megaBullet:MegaBullet):Void
+	{
+		killEnemy(enemy);
 	}
 
 	private function killEnemy(enemy:Enemy)
@@ -216,7 +242,7 @@ class PlayState extends FlxState
 		}
 	}
 
-	private function playerRespawn(timer:FlxTimer):Void
+	private function playerRespawn():Void
 	{
 		_player.respawn();
 
@@ -239,6 +265,11 @@ class PlayState extends FlxState
 		_bullets.add(new Bullet(x, y, direction));
 	}
 
+	public function addMegaBullet(x:Float, y:Float, direction:Int, scale:Float):Void
+	{
+		_megaBullets.add(new MegaBullet(x, y, direction, scale));
+	}
+
 	public function addEnergy(v:Int)
 	{
 		_player.addEnergy(v);
@@ -256,11 +287,13 @@ class PlayState extends FlxState
 		setScore(_score + v);
 	}
 
-	public function killPlayer()
+	public function killPlayer(reason:String = "Running out of energy!!")
 	{
 		_player.kill();
 		FlxG.camera.shake(.02, 0.5);
-		_playerReviveTimer.start(3, playerRespawn, 1);
+
+		_gameOver = true;
+		_hud.gameOver(true, reason);
 	}
 
 	public function decreaseEnergy(v: Float)
@@ -270,6 +303,7 @@ class PlayState extends FlxState
 		if (v >= 3)
 		{
 			// HUD
+			_hud.shakeBattery(1, 1);
 		}
 	}
 }
