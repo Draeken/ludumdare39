@@ -202,17 +202,20 @@ class PlayState extends FlxState
 	private function onBulletTouchWall(bullet:Bullet, wall:FlxObject):Void
 	{
 		bullet.kill();
+		_bullets.remove(bullet);
 	}
 
 	private function onMegaBulletTouchWall(megaBullet:MegaBullet, wall:FlxObject):Void
 	{
 		megaBullet.kill();
+		_megaBullets.remove(megaBullet);
 	}
 
 	private function onEnemyTouchBullet(enemy:Enemy, bullet:Bullet):Void
 	{
 		killEnemy(enemy);
 		bullet.kill();
+		_bullets.remove(bullet);
 	}
 
 	private function onEnemyTouchMegaBullet(enemy:Enemy, megaBullet:MegaBullet):Void
