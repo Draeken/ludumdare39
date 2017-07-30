@@ -38,6 +38,7 @@ class Player extends FlxSprite
         _playState = playState;
 
         loadGraphic(AssetPaths.player__png, true, 32, 48);
+        animation.add("forward", [0, 1, 2, 3, 4], 12, false);
 
         setFacingFlip(FlxObject.LEFT, false, false);
         setFacingFlip(FlxObject.RIGHT, true, false);
@@ -89,11 +90,13 @@ class Player extends FlxSprite
         acceleration.x = 0;
         acceleration.y = GRAVITY;
 
+
 		if (FlxG.keys.anyPressed([LEFT, A]))
 		{
             acceleration.x = -drag.x;
             _direction = -1;
             facing = FlxObject.RIGHT;
+            animation.play("forward");
 		}
 
 		if (FlxG.keys.anyPressed([RIGHT, D]))
@@ -101,6 +104,7 @@ class Player extends FlxSprite
             acceleration.x = drag.x;
             _direction = 1;
             facing = FlxObject.LEFT;
+            animation.play("forward");
 		}
 
         if (acceleration.x != 0)
@@ -131,7 +135,7 @@ class Player extends FlxSprite
         if (FlxG.keys.anyJustPressed(_jumpKeys) && (_timesJumped < JUMPS_ALLOWED))
         {
             _playState.decreaseEnergy(10);
-            
+
             FlxG.sound.play(AssetPaths.jump__wav);
             _timesJumped++;
             _jumpTime = 0;
@@ -165,7 +169,7 @@ class Player extends FlxSprite
         if (FlxG.keys.justPressed.X)
         {
             _playState.decreaseEnergy(50);
-            
+
             var offset:Float = velocity.x / maxVelocity.x;
 
             if (_direction == 1)
@@ -179,7 +183,7 @@ class Player extends FlxSprite
                 _playState.addBullet(x + _direction * offset, y + (height / 2.0) + 16, _direction);
 
             _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
-            
+
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
         else if (FlxG.keys.pressed.X)

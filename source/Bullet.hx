@@ -12,7 +12,8 @@ class Bullet extends FlxSprite
     public function new(x:Float, y:Float, direction:Int)
     {
         super(x, y);
-        loadGraphic(AssetPaths.bullet__png, false);
+        loadGraphic(AssetPaths.bulletsheet__png, true, 8, 8);
+        animation.add("forward", [0, 1, 2, 3, 4], 6, true);
         _direction = direction;
         velocity.x = _speed * _direction;
     }
@@ -20,6 +21,7 @@ class Bullet extends FlxSprite
     override public function update(elapsed:Float):Void
     {
         super.update(elapsed);
+        animation.play("forward");
     }
 
     override public function kill():Void
