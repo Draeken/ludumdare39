@@ -64,15 +64,17 @@ class BatterySpawner extends FlxGroup
         _battery = new Battery(_playState, _player, position.x, position.y);
         _battery.killed(function(battery:Battery)
         {
-            despawnBattery(battery);
+            despawnBattery();
             resetSpawnTimer();
         });
         add(_battery);
+
+        _playState.addBattery(_battery);
     }
 
-    private function despawnBattery(battery:Battery):Void
+    public function despawnBattery():Void
     {
-        remove(battery);
+        remove(_battery);
         _battery = null;
     }
 

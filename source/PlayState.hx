@@ -12,6 +12,7 @@ import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxTimer;
+import flixel.FlxBasic;
 
 class PlayState extends FlxState
 {
@@ -22,6 +23,7 @@ class PlayState extends FlxState
 	private var _grpEnemySpawners:FlxTypedGroup<EnemySpawner>;
 
 	private var _enemies:FlxTypedGroup<Enemy>;
+	private var _batteries:FlxTypedGroup<Battery>;
 
 	private var _teleporters:FlxTypedGroup<Teleporter>;
 	private var _topTeleporters:Array<Teleporter>;
@@ -32,6 +34,8 @@ class PlayState extends FlxState
 	private var _score:Int;
 
 	private var _gameOver:Bool = false;
+
+	private var _batterySpawner:BatterySpawner;
 
 	// HUD
 	private var _hud:HUD;
@@ -62,6 +66,8 @@ class PlayState extends FlxState
 
 		_enemies = new FlxTypedGroup<Enemy>();
 		add(_enemies);
+
+		_batteries = new FlxTypedGroup<Battery>();
 
 		_topTeleporters = [];
 		_bottomTeleporters = [];
@@ -147,12 +153,12 @@ class PlayState extends FlxState
 
 	private function placeBatterySpawners(layer:TiledObjectLayer):Void
 	{
-		var batterySpawner = new BatterySpawner(this, _player);
+		_batterySpawner = new BatterySpawner(this, _player);
 
 		for (obj in layer.objects)
-			batterySpawner.addTile(obj);
+			_batterySpawner.addTile(obj);
 
-		add(batterySpawner);
+		add(_batterySpawner);
 	}
 
 	private function placeTeleporters(layer:TiledObjectLayer):Void
@@ -233,7 +239,13 @@ class PlayState extends FlxState
 			});
 
 			add(battery);
+			addBattery(battery);
 		}
+	}
+
+	public function addBattery(battery:Battery)
+	{
+		_batteries.add(battery);
 	}
 
 	private function playerRespawn():Void
@@ -288,6 +300,15 @@ class PlayState extends FlxState
 
 		_gameOver = true;
 		_hud.gameOver(true, reason);
+
+		_enemies.clear();
+
+		for (battery in _batteries)
+			remove(battery);
+			
+		_batteries.clear();
+		
+		_batterySpawner.despawnBattery();
 	}
 
 	public function decreaseEnergy(v: Float)
