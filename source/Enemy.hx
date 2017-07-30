@@ -27,7 +27,7 @@ class Enemy extends FlxSprite
         velocity.x = _speed * _direction;
         origin.y = height;
 
-        color = 0xff0000;
+        color = 0xe57373;
 
         updateFacing();
     }
