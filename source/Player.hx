@@ -163,7 +163,15 @@ class Player extends FlxSprite
             if (_direction == 1)
                 offset += width / 2.0;
 
+            var energyPercent:Float = _energy / _maxEnergy;
+            if (energyPercent > 0.75)
+                _playState.addBullet(x + _direction * offset, y + (height / 2.0) - 16, _direction);
+
+            if (energyPercent > 0.3)
+                _playState.addBullet(x + _direction * offset, y + (height / 2.0) + 16, _direction);
+
             _playState.addBullet(x + _direction * offset, y + (height / 2.0), _direction);
+            
             FlxG.sound.play(AssetPaths.shoot1__wav);
         }
     }
