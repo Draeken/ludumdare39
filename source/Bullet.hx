@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
@@ -14,6 +15,9 @@ class Bullet extends FlxSprite
         super(x, y);
         loadGraphic(AssetPaths.bulletsheet__png, true, 8, 8);
         animation.add("forward", [0, 1, 2, 3, 4], 20, true);
+        setFacingFlip(FlxObject.LEFT, true, false);
+        setFacingFlip(FlxObject.RIGHT, false, false);
+        facing = direction > 0 ? FlxObject.RIGHT : FlxObject.LEFT;
         _direction = direction;
         velocity.x = _speed * _direction;
     }

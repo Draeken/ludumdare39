@@ -17,7 +17,7 @@ class MegaBullet extends FlxSprite
         loadGraphic(AssetPaths.bulletsheet__png, true, 8, 8);
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
-        this.facing = direction > 0 ? FlxObject.RIGHT : FlxObject.LEFT;
+        facing = direction > 0 ? FlxObject.RIGHT : FlxObject.LEFT;
         animation.add("forward", [0, 1, 2, 3, 4], 20, true);
         _direction = direction;
         velocity.x = _speed * _direction;
